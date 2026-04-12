@@ -814,7 +814,7 @@ function buildOverflowChips(hiddenTabs, urlCounts = {}) {
     const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=16` : '';
     return `<div class="page-chip clickable${chipClass}" data-action="focus-tab" data-tab-url="${safeUrl}" title="${safeTitle}">
       ${faviconUrl ? `<img class="chip-favicon" src="${faviconUrl}" alt="" onerror="this.style.display='none'">` : ''}
-      <span class="chip-text">${label}${dupeTag}</span>
+      <span class="chip-text">${label}</span>${dupeTag}
       <div class="chip-actions">
         <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="Save for later">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" /></svg>
@@ -848,32 +848,10 @@ function renderDomainCard(group, groupIndex) {
   const isLanding = group.domain === '__landing-pages__';
   const stableId  = 'domain-' + group.domain.replace(/[^a-z0-9]/g, '-');
 
-  // Detect duplicates within this domain group
-  // Normalize URLs for comparison: strip trailing slash, hash, and sort query params
-  function normalizeUrl(url) {
-    try {
-      const u = new URL(url);
-      u.hash = '';
-      // Remove trailing slash from pathname (but keep "/" alone)
-      if (u.pathname.length > 1 && u.pathname.endsWith('/')) {
-        u.pathname = u.pathname.slice(0, -1);
-      }
-      return u.toString();
-    } catch { return url; }
-  }
-
-  // Map each tab to its normalized URL, then count
-  const normalizedMap = {}; // normalizedUrl -> original url (first seen)
-  const urlCounts = {};     // original url (first seen) -> count
+  // Detect duplicates within this domain group (exact URL match)
+  const urlCounts = {};
   for (const tab of tabs) {
-    const norm = normalizeUrl(tab.url);
-    if (!normalizedMap[norm]) {
-      normalizedMap[norm] = tab.url;
-      urlCounts[tab.url] = 1;
-    } else {
-      // Increment count on the first-seen URL
-      urlCounts[normalizedMap[norm]] = (urlCounts[normalizedMap[norm]] || 1) + 1;
-    }
+    urlCounts[tab.url] = (urlCounts[tab.url] || 0) + 1;
   }
   const dupeUrls = Object.entries(urlCounts).filter(([, c]) => c > 1);
   const hasDupes = dupeUrls.length > 0;
@@ -892,13 +870,12 @@ function renderDomainCard(group, groupIndex) {
       </span>`
     : '';
 
-  // Deduplicate for display using normalized URLs: show each URL once with (Nx) badge
+  // Deduplicate for display: show each URL once with (Nx) badge if duplicated
   const seen = new Set();
   const uniqueTabs = [];
   for (const tab of tabs) {
-    const norm = normalizeUrl(tab.url);
-    if (!seen.has(norm)) {
-      seen.add(norm);
+    if (!seen.has(tab.url)) {
+      seen.add(tab.url);
       uniqueTabs.push(tab);
     }
   }
@@ -918,7 +895,7 @@ function renderDomainCard(group, groupIndex) {
     const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=16` : '';
     return `<div class="page-chip clickable${chipClass}" data-action="focus-tab" data-tab-url="${safeUrl}" title="${safeTitle}">
       ${faviconUrl ? `<img class="chip-favicon" src="${faviconUrl}" alt="" onerror="this.style.display='none'">` : ''}
-      <span class="chip-text">${label}${dupeTag}</span>
+      <span class="chip-text">${label}</span>${dupeTag}
       <div class="chip-actions">
         <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="Save for later">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" /></svg>
