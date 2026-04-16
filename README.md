@@ -1,8 +1,8 @@
-# Tab Out
+# Tab Control
 
 **Keep tabs on your tabs.**
 
-Tab Out is a Chrome extension that replaces your new tab page with a dashboard of everything you have open. Tabs are grouped by domain, with homepages (Gmail, X, LinkedIn, etc.) pulled into their own group. Close tabs with a satisfying swoosh + confetti.
+Tab Control is a Chrome extension that replaces your new tab page with a dashboard of everything you have open. Tabs are grouped by domain, with homepages (Gmail, X, LinkedIn, etc.) pulled into their own group. Close tabs with a satisfying swoosh + confetti.
 
 No server. No account. No external API calls. Just a Chrome extension.
 
@@ -13,7 +13,7 @@ No server. No account. No external API calls. Just a Chrome extension.
 Send your coding agent (Claude Code, Codex, etc.) this repo and say **"install this"**:
 
 ```
-https://github.com/zarazhangrui/tab-out
+https://github.com/xiaowo1800/tab-control
 ```
 
 The agent will walk you through it. Takes about 1 minute.
@@ -40,7 +40,7 @@ The agent will walk you through it. Takes about 1 minute.
 **1. Clone the repo**
 
 ```bash
-git clone https://github.com/zarazhangrui/tab-out.git
+git clone https://github.com/xiaowo1800/tab-control.git
 ```
 
 **2. Load the Chrome extension**
@@ -52,7 +52,7 @@ git clone https://github.com/zarazhangrui/tab-out.git
 
 **3. Open a new tab**
 
-You'll see Tab Out.
+You'll see Tab Control.
 
 ---
 
@@ -60,7 +60,7 @@ You'll see Tab Out.
 
 ```
 You open a new tab
-  -> Tab Out shows your open tabs grouped by domain
+  -> Tab Control shows your open tabs grouped by domain
   -> Homepages (Gmail, X, etc.) get their own group at the top
   -> Click any tab title to jump to it
   -> Close groups you're done with (swoosh + confetti)
@@ -88,4 +88,4 @@ MIT
 
 ---
 
-Built by [Zara](https://x.com/zarazhangrui)
+Customized by AI老黄

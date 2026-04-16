@@ -1,6 +1,6 @@
-# AGENTS.md -- Tab Out: Setup & Onboarding Guide for Coding Agents
+# AGENTS.md -- Tab Control: Setup & Onboarding Guide for Coding Agents
 
-You're installing **Tab Out** for the user. Your job is not just to set it up -- it's to get them excited about using it.
+You're installing **Tab Control** for the user. Your job is not just to set it up -- it's to get them excited about using it.
 
 ---
 
@@ -8,7 +8,7 @@ You're installing **Tab Out** for the user. Your job is not just to set it up --
 
 Before doing anything technical, tell the user what they're about to get:
 
-> **Tab Out** replaces your new tab page with a clean dashboard of everything you have open, grouped by domain.
+> **Tab Control** replaces your new tab page with a clean dashboard of everything you have open, grouped by domain.
 >
 > Here's what makes it great:
 > - **See all your open tabs at a glance** grouped by domain on a grid
@@ -26,8 +26,8 @@ Before doing anything technical, tell the user what they're about to get:
 ## Step 1 -- Clone the repo
 
 ```bash
-git clone https://github.com/zarazhangrui/tab-out.git
-cd tab-out
+git clone https://github.com/xiaowo1800/tab-control.git
+cd tab-control
 ```
 
 ---
@@ -60,7 +60,7 @@ open "chrome://extensions"
 > 3. A file picker will open. **Press Cmd+Shift+G** (Mac) or **Ctrl+L** (Windows/Linux) to open the "Go to folder" bar, then **paste** the path I copied (Cmd+V / Ctrl+V) and press Enter.
 > 4. Click **"Select"** or **"Open"** and the extension will install.
 >
-> You should see "Tab Out" appear in your extensions list.
+> You should see "Tab Control" appear in your extensions list.
 
 **Also**, open the file browser directly to the extension folder as a fallback:
 - macOS: `open extension/`
@@ -73,7 +73,7 @@ open "chrome://extensions"
 
 Once the extension is loaded:
 
-> You're all set! Open a **new tab** and you'll see Tab Out.
+> You're all set! Open a **new tab** and you'll see Tab Control.
 >
 > Here's how it works:
 > 1. **Your open tabs are grouped by domain** in a grid layout.
@@ -90,7 +90,7 @@ Once the extension is loaded:
 
 ## Key Facts
 
-- Tab Out is a pure Chrome extension. No server, no Node.js, no npm.
+- Tab Control is a pure Chrome extension. No server, no Node.js, no npm.
 - Saved tabs are stored in `chrome.storage.local` (persists across sessions).
 - 100% local. No data is sent to any external service.
-- To update: `cd tab-out && git pull`, then reload the extension in `chrome://extensions`.
+- To update: `cd tab-control && git pull`, then reload the extension in `chrome://extensions`.
