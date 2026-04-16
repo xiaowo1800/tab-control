@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tab Out</title>
+  <title>Tab Control</title>
 
   <!-- Google Fonts: Newsreader (for headings/numbers) + DM Sans (for body text) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,10 +26,16 @@
       <!-- "Friday, April 4, 2026" — written by getDateDisplay() in app.js -->
       <div class="date" id="dateDisplay"></div>
     </div>
+    <div class="header-right">
+      <button class="new-tab-btn" data-action="open-default-newtab" title="打开 Chrome 默认新标签页">
+        <span class="new-tab-btn-plus">+</span>
+        <span>新标签页</span>
+      </button>
+    </div>
   </header>
 
   <!-- ================================================================
-       TAB OUT DUPES BANNER — appears when you have extra Tab Out tabs open
+       TAB OUT DUPES BANNER — appears when you have extra Tab Control tabs open
        Hidden by default; app.js shows it when dupeTabOutCount > 1
        ================================================================ -->
   <div class="tab-cleanup-banner" id="tabOutDupeBanner" style="display:none">
@@ -40,10 +46,10 @@
         </svg>
       </div>
       <div class="tab-cleanup-text">
-        You have <strong id="tabOutDupeCount"></strong> Tab Out tabs open. Keep just this one?
+        你当前打开了 <strong id="tabOutDupeCount"></strong> 个 Tab Control 页面。只保留当前这个吗？
       </div>
     </div>
-    <button class="tab-cleanup-btn" data-action="close-tabout-dupes">Close extras</button>
+    <button class="tab-cleanup-btn" data-action="close-tabout-dupes">关闭多余页面</button>
   </div>
 
   <!-- ================================================================
@@ -57,7 +63,7 @@
     <!-- LEFT COLUMN: Open tabs -->
     <div class="active-section" id="openTabsSection" style="display:none">
       <div class="section-header">
-        <h2 id="openTabsSectionTitle">Right now</h2>
+        <h2 id="openTabsSectionTitle">当前打开的标签页</h2>
         <div class="section-line"></div>
         <div class="section-count" id="openTabsSectionCount"></div>
       </div>
@@ -67,7 +73,7 @@
     <!-- RIGHT COLUMN: Saved for Later checklist -->
     <div class="deferred-column" id="deferredColumn" style="display:none">
       <div class="section-header">
-        <h2>Saved for later</h2>
+        <h2>稍后再看</h2>
         <div class="section-line"></div>
         <div class="section-count" id="deferredCount"></div>
       </div>
@@ -77,18 +83,18 @@
 
       <!-- Empty state — shown when no active deferred tabs -->
       <div class="deferred-empty" id="deferredEmpty" style="display:none">
-        Nothing saved. Living in the moment.
+        这里还没有内容，先去忙当前最重要的事吧。
       </div>
 
       <!-- Archive section — collapsed by default -->
       <div class="deferred-archive" id="deferredArchive" style="display:none">
         <button class="archive-toggle" id="archiveToggle">
           <svg class="archive-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
-          Archive
+          已归档
           <span class="archive-count" id="archiveCount"></span>
         </button>
         <div class="archive-body" id="archiveBody" style="display:none">
-          <input type="text" class="archive-search" id="archiveSearch" placeholder="Search archived tabs...">
+          <input type="text" class="archive-search" id="archiveSearch" placeholder="搜索已归档的标签页...">
           <div class="archive-list" id="archiveList"></div>
         </div>
       </div>
@@ -103,11 +109,11 @@
     <div class="footer-stats">
       <div class="stat">
         <div class="stat-num" id="statTabs">—</div>
-        <div class="stat-label">Open tabs</div>
+        <div class="stat-label">已打开标签页</div>
       </div>
     </div>
     <div class="last-refresh">
-      <span style="color: var(--muted); font-size: 11px;"><a href="https://github.com/zarazhangrui/tab-out" target="_top" style="color: var(--muted); text-decoration: underline; text-underline-offset: 2px;">Tab Out</a> by <a href="https://x.com/zarazhangrui" target="_top" style="color: var(--muted); text-decoration: underline; text-underline-offset: 2px;">Zara</a></span>
+      <span style="color: var(--muted); font-size: 11px;">Tab Control · by 老黄</span>
     </div>
   </footer>
 

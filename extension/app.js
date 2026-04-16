@@ -1,5 +1,5 @@
 /* ================================================================
-   Tab Out — Dashboard App (Pure Extension Edition)
+   Tab Control — Dashboard App (Pure Extension Edition)
 
    This file is the brain of the dashboard. Now that the dashboard
    IS the extension page (not inside an iframe), it can call
@@ -30,7 +30,7 @@ let openTabs = [];
  * fetchOpenTabs()
  *
  * Reads all currently open browser tabs directly from Chrome.
- * Sets the extensionId flag so we can identify Tab Out's own pages.
+ * Sets the extensionId flag so we can identify Tab Control's own pages.
  */
 async function fetchOpenTabs() {
   try {
@@ -45,7 +45,7 @@ async function fetchOpenTabs() {
       title:    t.title,
       windowId: t.windowId,
       active:   t.active,
-      // Flag Tab Out's own pages so we can detect duplicate new tabs
+      // Flag Tab Control's own pages so we can detect duplicate new tabs
       isTabOut: t.url === newtabUrl || t.url === 'chrome://newtab/',
     }));
   } catch {
@@ -172,7 +172,7 @@ async function closeDuplicateTabs(urls, keepOne = true) {
 /**
  * closeTabOutDupes()
  *
- * Closes all duplicate Tab Out new-tab pages except the current one.
+ * Closes all duplicate Tab Control new-tab pages except the current one.
  */
 async function closeTabOutDupes() {
   const extensionId = chrome.runtime.id;
@@ -186,7 +186,7 @@ async function closeTabOutDupes() {
 
   if (tabOutTabs.length <= 1) return;
 
-  // Keep the active Tab Out tab in the CURRENT window — that's the one the
+  // Keep the active Tab Control tab in the CURRENT window — that's the one the
   // user is looking at right now. Falls back to any active one, then the first.
   const keep =
     tabOutTabs.find(t => t.active && t.windowId === currentWindow.id) ||
@@ -461,13 +461,13 @@ function checkAndShowEmptyState() {
           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
         </svg>
       </div>
-      <div class="empty-title">Inbox zero, but for tabs.</div>
-      <div class="empty-subtitle">You're free.</div>
+      <div class="empty-title">标签页已经清爽了。</div>
+      <div class="empty-subtitle">现在可以更专注地开始做事。</div>
     </div>
   `;
 
   const countEl = document.getElementById('openTabsSectionCount');
-  if (countEl) countEl.textContent = '0 domains';
+  if (countEl) countEl.textContent = '0 个分组';
 }
 
 /**
@@ -484,11 +484,11 @@ function timeAgo(dateStr) {
   const diffHours = Math.floor((now - then) / 3600000);
   const diffDays  = Math.floor((now - then) / 86400000);
 
-  if (diffMins < 1)   return 'just now';
-  if (diffMins < 60)  return diffMins + ' min ago';
-  if (diffHours < 24) return diffHours + ' hr' + (diffHours !== 1 ? 's' : '') + ' ago';
-  if (diffDays === 1) return 'yesterday';
-  return diffDays + ' days ago';
+  if (diffMins < 1)   return '刚刚';
+  if (diffMins < 60)  return diffMins + ' 分钟前';
+  if (diffHours < 24) return diffHours + ' 小时前';
+  if (diffDays === 1) return '昨天';
+  return diffDays + ' 天前';
 }
 
 /**
@@ -496,16 +496,16 @@ function timeAgo(dateStr) {
  */
 function getGreeting() {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  return 'Good evening';
+  if (hour < 12) return '上午好';
+  if (hour < 17) return '下午好';
+  return '晚上好';
 }
 
 /**
  * getDateDisplay() — "Friday, April 4, 2026"
  */
 function getDateDisplay() {
-  return new Date().toLocaleDateString('en-US', {
+  return new Date().toLocaleDateString('zh-CN', {
     weekday: 'long',
     year:    'numeric',
     month:   'long',
@@ -584,8 +584,8 @@ const FRIENDLY_DOMAINS = {
   'producthunt.com':      'Product Hunt',
   'www.producthunt.com':  'Product Hunt',
   'xiaohongshu.com':      'RedNote',
-  'www.xiaohongshu.com':  'RedNote',
-  'local-files':          'Local Files',
+  'www.xiaohongshu.com':  '小红书',
+  'local-files':          '本地文件',
 };
 
 function friendlyDomain(hostname) {
@@ -735,7 +735,7 @@ function getRealTabs() {
 /**
  * checkTabOutDupes()
  *
- * Counts how many Tab Out pages are open. If more than 1,
+ * Counts how many Tab Control pages are open. If more than 1,
  * shows a banner offering to close the extras.
  */
 function checkTabOutDupes() {
@@ -772,10 +772,10 @@ function buildOverflowChips(hiddenTabs, urlCounts = {}) {
       ${faviconUrl ? `<img class="chip-favicon" src="${faviconUrl}" alt="" onerror="this.style.display='none'">` : ''}
       <span class="chip-text">${label}</span>${dupeTag}
       <div class="chip-actions">
-        <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="Save for later">
+        <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="加入稍后再看">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" /></svg>
         </button>
-        <button class="chip-action chip-close" data-action="close-single-tab" data-tab-url="${safeUrl}" title="Close this tab">
+        <button class="chip-action chip-close" data-action="close-single-tab" data-tab-url="${safeUrl}" title="关闭这个标签页">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
         </button>
       </div>
@@ -785,7 +785,7 @@ function buildOverflowChips(hiddenTabs, urlCounts = {}) {
   return `
     <div class="page-chips-overflow" style="display:none">${hiddenChips}</div>
     <div class="page-chip page-chip-overflow clickable" data-action="expand-chips">
-      <span class="chip-text">+${hiddenTabs.length} more</span>
+      <span class="chip-text">还有 ${hiddenTabs.length} 个</span>
     </div>`;
 }
 
@@ -815,12 +815,12 @@ function renderDomainCard(group) {
 
   const tabBadge = `<span class="open-tabs-badge">
     ${ICONS.tabs}
-    ${tabCount} tab${tabCount !== 1 ? 's' : ''} open
+    已打开 ${tabCount} 个标签页
   </span>`;
 
   const dupeBadge = hasDupes
     ? `<span class="open-tabs-badge" style="color:var(--accent-amber);background:rgba(200,113,58,0.08);">
-        ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}
+        重复 ${totalExtras} 个
       </span>`
     : '';
 
@@ -853,10 +853,10 @@ function renderDomainCard(group) {
       ${faviconUrl ? `<img class="chip-favicon" src="${faviconUrl}" alt="" onerror="this.style.display='none'">` : ''}
       <span class="chip-text">${label}</span>${dupeTag}
       <div class="chip-actions">
-        <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="Save for later">
+        <button class="chip-action chip-save" data-action="defer-single-tab" data-tab-url="${safeUrl}" data-tab-title="${safeTitle}" title="加入稍后再看">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" /></svg>
         </button>
-        <button class="chip-action chip-close" data-action="close-single-tab" data-tab-url="${safeUrl}" title="Close this tab">
+        <button class="chip-action chip-close" data-action="close-single-tab" data-tab-url="${safeUrl}" title="关闭这个标签页">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
         </button>
       </div>
@@ -866,14 +866,14 @@ function renderDomainCard(group) {
   let actionsHtml = `
     <button class="action-btn close-tabs" data-action="close-domain-tabs" data-domain-id="${stableId}">
       ${ICONS.close}
-      Close all ${tabCount} tab${tabCount !== 1 ? 's' : ''}
+      关闭这组全部 ${tabCount} 个标签页
     </button>`;
 
   if (hasDupes) {
     const dupeUrlsEncoded = dupeUrls.map(([url]) => encodeURIComponent(url)).join(',');
     actionsHtml += `
       <button class="action-btn" data-action="dedup-keep-one" data-dupe-urls="${dupeUrlsEncoded}">
-        Close ${totalExtras} duplicate${totalExtras !== 1 ? 's' : ''}
+        关闭重复的 ${totalExtras} 个
       </button>`;
   }
 
@@ -882,7 +882,7 @@ function renderDomainCard(group) {
       <div class="status-bar"></div>
       <div class="mission-content">
         <div class="mission-top">
-          <span class="mission-name">${isLanding ? 'Homepages' : (group.label || friendlyDomain(group.domain))}</span>
+          <span class="mission-name">${isLanding ? '首页类页面' : (group.label || friendlyDomain(group.domain))}</span>
           ${tabBadge}
           ${dupeBadge}
         </div>
@@ -952,7 +952,7 @@ async function renderDeferredColumn() {
     }
 
   } catch (err) {
-    console.warn('[tab-out] Could not load saved tabs:', err);
+    console.warn('[tab-control] Could not load saved tabs:', err);
     column.style.display = 'none';
   }
 }
@@ -1149,8 +1149,8 @@ async function renderStaticDashboard() {
   const openTabsSectionTitle = document.getElementById('openTabsSectionTitle');
 
   if (domainGroups.length > 0 && openTabsSection) {
-    if (openTabsSectionTitle) openTabsSectionTitle.textContent = 'Open tabs';
-    openTabsSectionCount.innerHTML = `${domainGroups.length} domain${domainGroups.length !== 1 ? 's' : ''} &nbsp;&middot;&nbsp; <button class="action-btn close-tabs" data-action="close-all-open-tabs" style="font-size:11px;padding:3px 10px;">${ICONS.close} Close all ${realTabs.length} tabs</button>`;
+    if (openTabsSectionTitle) openTabsSectionTitle.textContent = '当前打开的标签页';
+    openTabsSectionCount.innerHTML = `${domainGroups.length} 个分组 &nbsp;&middot;&nbsp; <button class="action-btn close-tabs" data-action="close-all-open-tabs" style="font-size:11px;padding:3px 10px;">${ICONS.close} 关闭全部 ${realTabs.length} 个标签页</button>`;
     openTabsMissionsEl.innerHTML = domainGroups.map(g => renderDomainCard(g)).join('');
     openTabsSection.style.display = 'block';
   } else if (openTabsSection) {
@@ -1161,7 +1161,7 @@ async function renderStaticDashboard() {
   const statTabs = document.getElementById('statTabs');
   if (statTabs) statTabs.textContent = openTabs.length;
 
-  // --- Check for duplicate Tab Out tabs ---
+  // --- Check for duplicate Tab Control tabs ---
   checkTabOutDupes();
 
   // --- Render "Saved for Later" column ---
@@ -1188,7 +1188,14 @@ document.addEventListener('click', async (e) => {
 
   const action = actionEl.dataset.action;
 
-  // ---- Close duplicate Tab Out tabs ----
+  // ---- Open Chrome's default new tab page (not Tab Control) ----
+  if (action === 'open-default-newtab') {
+    await chrome.tabs.create({ url: 'chrome://new-tab-page/' });
+    showToast('已打开默认新标签页');
+    return;
+  }
+
+  // ---- Close duplicate Tab Control tabs ----
   if (action === 'close-tabout-dupes') {
     await closeTabOutDupes();
     playCloseSound();
@@ -1198,7 +1205,7 @@ document.addEventListener('click', async (e) => {
       banner.style.opacity = '0';
       setTimeout(() => { banner.style.display = 'none'; banner.style.opacity = '1'; }, 400);
     }
-    showToast('Closed extra Tab Out tabs');
+    showToast('已关闭多余的 Tab Control 页面');
     return;
   }
 
@@ -1275,7 +1282,7 @@ document.addEventListener('click', async (e) => {
     try {
       await saveTabForLater({ url: tabUrl, title: tabTitle });
     } catch (err) {
-      console.error('[tab-out] Failed to save tab:', err);
+      console.error('[tab-control] Failed to save tab:', err);
       showToast('Failed to save tab');
       return;
     }
@@ -1295,7 +1302,7 @@ document.addEventListener('click', async (e) => {
       setTimeout(() => chip.remove(), 200);
     }
 
-    showToast('Saved for later');
+    showToast('已加入稍后再看');
     await renderDeferredColumn();
     return;
   }
@@ -1368,8 +1375,8 @@ document.addEventListener('click', async (e) => {
     const idx = domainGroups.indexOf(group);
     if (idx !== -1) domainGroups.splice(idx, 1);
 
-    const groupLabel = group.domain === '__landing-pages__' ? 'Homepages' : (group.label || friendlyDomain(group.domain));
-    showToast(`Closed ${urls.length} tab${urls.length !== 1 ? 's' : ''} from ${groupLabel}`);
+    const groupLabel = group.domain === '__landing-pages__' ? '首页类页面' : (group.label || friendlyDomain(group.domain));
+    showToast(`已从 ${groupLabel} 关闭 ${urls.length} 个标签页`);
 
     const statTabs = document.getElementById('statTabs');
     if (statTabs) statTabs.textContent = openTabs.length;
@@ -1398,7 +1405,7 @@ document.addEventListener('click', async (e) => {
         setTimeout(() => b.remove(), 200);
       });
       card.querySelectorAll('.open-tabs-badge').forEach(badge => {
-        if (badge.textContent.includes('duplicate')) {
+        if (badge.textContent.includes('重复')) {
           badge.style.transition = 'opacity 0.2s';
           badge.style.opacity    = '0';
           setTimeout(() => badge.remove(), 200);
@@ -1408,7 +1415,7 @@ document.addEventListener('click', async (e) => {
       card.classList.add('has-neutral-bar');
     }
 
-    showToast('Closed duplicates, kept one copy each');
+    showToast('已关闭重复标签页，并保留一个');
     return;
   }
 
@@ -1469,9 +1476,9 @@ document.addEventListener('input', async (e) => {
     );
 
     archiveList.innerHTML = results.map(item => renderArchiveItem(item)).join('')
-      || '<div style="font-size:12px;color:var(--muted);padding:8px 0">No results</div>';
+      || '<div style="font-size:12px;color:var(--muted);padding:8px 0">没有找到结果</div>';
   } catch (err) {
-    console.warn('[tab-out] Archive search failed:', err);
+    console.warn('[tab-control] Archive search failed:', err);
   }
 });
 
